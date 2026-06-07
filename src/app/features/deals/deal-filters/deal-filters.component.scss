@@ -13,13 +13,13 @@
     label {
       font-size: 0.8125rem;
       font-weight: 600;
-      color: #5a5a5a;
+      color: var(--kp-muted);
     }
 
     input {
       padding: 0.55rem 0.75rem;
-      border: 1px solid #c8c8c8;
-      border-radius: 0.5rem;
+      border: 1px solid var(--kp-field-border);
+      border-radius: var(--kp-radius);
       font-size: 0.9375rem;
     }
   }

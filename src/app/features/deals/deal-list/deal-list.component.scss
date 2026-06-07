@@ -14,19 +14,21 @@
 
   &__new {
     padding: 0.55rem 1rem;
-    border-radius: 0.5rem;
-    background: #0693e3;
+    border-radius: var(--kp-radius);
+    background: var(--kp-action);
     color: #fff;
     font-size: 0.9375rem;
     text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
 
     &:hover {
-      background: #00aeef;
+      background: var(--kp-action-hover);
     }
   }
 
   &__status {
-    color: #5a5a5a;
+    color: var(--kp-muted);
   }
 
   &__error {
@@ -35,15 +37,15 @@
     gap: 1rem;
     flex-wrap: wrap;
     padding: 1rem;
-    border: 1px solid #f3c2c2;
-    border-radius: 0.5rem;
-    background: #fdeaea;
-    color: #b00020;
+    border: 1px solid var(--kp-danger-border);
+    border-radius: var(--kp-radius);
+    background: var(--kp-danger-bg);
+    color: var(--kp-danger);
 
     button {
       padding: 0.4rem 0.85rem;
       border: 1px solid currentColor;
-      border-radius: 0.5rem;
+      border-radius: var(--kp-radius);
       background: transparent;
       color: inherit;
       cursor: pointer;
@@ -52,26 +54,32 @@
 
   &__table-wrap {
     overflow-x: auto;
+    border: 1px solid var(--kp-border);
+    border-radius: var(--kp-radius-lg);
   }
 
   &__table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
+    background: var(--kp-surface);
 
     th,
     td {
       padding: 0.75rem 1rem;
       text-align: left;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--kp-border);
       white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
     }
 
     th {
       font-size: 0.8125rem;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      color: #5a5a5a;
+      color: var(--kp-muted);
     }
 
     .num {
@@ -80,7 +88,7 @@
     }
 
     tbody tr:hover {
-      background: #f7f5f1;
+      background: var(--kp-row-hover);
     }
   }
 }
