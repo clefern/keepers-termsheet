@@ -1,10 +1,12 @@
 # TermSheet — Real Estate Deal Manager
 
+[![CI](https://github.com/clefern/keepers-termsheet/actions/workflows/ci.yml/badge.svg)](https://github.com/clefern/keepers-termsheet/actions/workflows/ci.yml)
+
 A small Angular 17 application to manage real estate deals (list, create, filter) behind an
 authenticated area. Built as a take-home challenge with a focus on idiomatic Angular,
 state management with RxJS, testing with Jest and an accessible, branded UI.
 
-> 🔗 **Live demo:** _coming soon_
+> 🔗 **Live demo:** https://clefern.github.io/keepers-termsheet/ — sign in with **admin** / **password**
 
 ## Tech stack
 
