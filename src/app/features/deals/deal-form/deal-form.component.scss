@@ -15,17 +15,17 @@
   &__caprate {
     margin: 0;
     padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    background: #fff;
-    border: 1px solid #e0e0e0;
+    border-radius: var(--kp-radius);
+    background: var(--kp-surface);
+    border: 1px solid var(--kp-border);
   }
 
   &__hint {
-    color: #5a5a5a;
+    color: var(--kp-muted);
   }
 
   &__warning {
-    color: #b06a00;
+    color: var(--kp-warning);
     font-weight: 600;
   }
 
@@ -38,7 +38,7 @@
   }
 
   &__cancel {
-    color: #5a5a5a;
+    color: var(--kp-muted);
     text-decoration: none;
 
     &:hover {
@@ -49,11 +49,16 @@
   &__submit {
     padding: 0.75rem 1.25rem;
     border: 0;
-    border-radius: 0.5rem;
-    background: #0693e3;
+    border-radius: var(--kp-radius);
+    background: var(--kp-action);
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: var(--kp-action-hover);
+    }
   }
 }
 
@@ -69,14 +74,14 @@
 
   input {
     padding: 0.625rem 0.75rem;
-    border: 1px solid #c8c8c8;
-    border-radius: 0.5rem;
+    border: 1px solid var(--kp-field-border);
+    border-radius: var(--kp-radius);
     font-size: 1rem;
   }
 
   &__error {
     margin: 0;
-    color: #b00020;
+    color: var(--kp-danger);
     font-size: 0.8125rem;
   }
 }

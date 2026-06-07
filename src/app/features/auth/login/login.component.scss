@@ -9,9 +9,9 @@
     width: 100%;
     max-width: 24rem;
     padding: 2rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 0.75rem;
-    background: #fff;
+    border: 1px solid var(--kp-border);
+    border-radius: var(--kp-radius-lg);
+    background: var(--kp-surface);
   }
 
   &__title {
@@ -21,7 +21,7 @@
 
   &__subtitle {
     margin: 0.25rem 0 1.5rem;
-    color: #5a5a5a;
+    color: var(--kp-muted);
   }
 
   &__form {
@@ -32,18 +32,23 @@
 
   &__alert {
     margin: 0;
-    color: #b00020;
+    color: var(--kp-danger);
     font-size: 0.875rem;
   }
 
   &__submit {
     padding: 0.75rem 1rem;
     border: 0;
-    border-radius: 0.5rem;
-    background: #0693e3;
+    border-radius: var(--kp-radius);
+    background: var(--kp-action);
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--kp-action-hover);
+    }
 
     &:disabled {
       opacity: 0.6;
@@ -53,7 +58,7 @@
 
   &__hint {
     margin: 0;
-    color: #5a5a5a;
+    color: var(--kp-muted);
     font-size: 0.8125rem;
     text-align: center;
   }
@@ -71,18 +76,18 @@
 
   input {
     padding: 0.625rem 0.75rem;
-    border: 1px solid #c8c8c8;
-    border-radius: 0.5rem;
+    border: 1px solid var(--kp-field-border);
+    border-radius: var(--kp-radius);
     font-size: 1rem;
 
     &[aria-invalid='true'] {
-      border-color: #b00020;
+      border-color: var(--kp-danger);
     }
   }
 
   &__error {
     margin: 0;
-    color: #b00020;
+    color: var(--kp-danger);
     font-size: 0.8125rem;
   }
 }
