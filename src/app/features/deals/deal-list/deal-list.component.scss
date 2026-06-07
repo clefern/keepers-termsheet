@@ -1,0 +1,23 @@
+.deals {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #5a5a5a;
+  }
+
+  &__placeholder {
+    padding: 1.5rem;
+    color: #5a5a5a;
+  }
+}

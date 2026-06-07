@@ -1,0 +1,11 @@
+<header class="deals__header">
+  <h1>Deals</h1>
+  @if (user$ | async; as user) {
+    <div class="deals__user">
+      <span>Signed in as {{ user.displayName }}</span>
+      <button type="button" (click)="logout()">Sign out</button>
+    </div>
+  }
+</header>
+
+<p class="deals__placeholder">The deals table will appear here.</p>
