@@ -1,13 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { Deal, NewDeal } from '@core/models/deal.model';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { Deal, DealFilters, NewDeal } from '@core/models/deal.model';
 import { DealApiService } from './deal-api.service';
+
+const NO_FILTERS: DealFilters = { name: '', minPrice: null, maxPrice: null };
 
 /**
  * Single source of truth for deals. Holds state in `BehaviorSubject`s and
  * exposes it as read-only observables for components to consume with the
- * `async` pipe.
+ * `async` pipe. The visible list is derived by combining deals with filters.
  */
 @Injectable({ providedIn: 'root' })
 export class DealStore {
@@ -16,13 +18,22 @@ export class DealStore {
   private readonly dealsSubject = new BehaviorSubject<Deal[]>([]);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);
+  private readonly filtersSubject = new BehaviorSubject<DealFilters>(NO_FILTERS);
 
-  /** Current deals. */
+  /** All loaded deals (unfiltered). */
   readonly deals$: Observable<Deal[]> = this.dealsSubject.asObservable();
   /** Whether a request is in flight. */
   readonly loading$: Observable<boolean> = this.loadingSubject.asObservable();
   /** Last user-facing error message, or `null`. */
   readonly error$: Observable<string | null> = this.errorSubject.asObservable();
+  /** Currently applied filters. */
+  readonly filters$: Observable<DealFilters> = this.filtersSubject.asObservable();
+
+  /** Deals after applying the active filters. */
+  readonly filteredDeals$: Observable<Deal[]> = combineLatest([
+    this.dealsSubject,
+    this.filtersSubject,
+  ]).pipe(map(([deals, filters]) => DealStore.applyFilters(deals, filters)));
 
   /** Fetch deals from the API into the store. */
   load(): void {
@@ -43,6 +54,21 @@ export class DealStore {
     this.api.createDeal(deal).subscribe({
       next: (created) => this.dealsSubject.next([...this.dealsSubject.value, created]),
       error: () => this.errorSubject.next('Unable to create the deal. Please try again.'),
+    });
+  }
+
+  /** Merge a partial filter change into the active filters. */
+  setFilters(partial: Partial<DealFilters>): void {
+    this.filtersSubject.next({ ...this.filtersSubject.value, ...partial });
+  }
+
+  private static applyFilters(deals: Deal[], filters: DealFilters): Deal[] {
+    const name = filters.name.trim().toLowerCase();
+    return deals.filter((deal) => {
+      const matchesName = name === '' || deal.name.toLowerCase().includes(name);
+      const matchesMin = filters.minPrice === null || deal.purchasePrice >= filters.minPrice;
+      const matchesMax = filters.maxPrice === null || deal.purchasePrice <= filters.maxPrice;
+      return matchesName && matchesMin && matchesMax;
     });
   }
 }

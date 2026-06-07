@@ -77,4 +77,51 @@ describe('DealStore', () => {
 
     expect(await firstValueFrom(store.error$)).toMatch(/unable to create/i);
   });
+
+  describe('filtering', () => {
+    const dataset: Deal[] = [
+      { id: '1', name: 'Sunset Apartments', address: 'A', purchasePrice: 2_500_000, noi: 187_500 },
+      { id: '2', name: 'Harbor Plaza', address: 'B', purchasePrice: 5_000_000, noi: 300_000 },
+      { id: '3', name: 'Sunrise Tower', address: 'C', purchasePrice: 8_000_000, noi: 560_000 },
+    ];
+
+    beforeEach(() => {
+      store.load();
+      httpMock.expectOne('api/deals').flush(dataset);
+    });
+
+    it('returns every deal when no filters are set', async () => {
+      expect(await firstValueFrom(store.filteredDeals$)).toHaveLength(3);
+    });
+
+    it('filters by name (case-insensitive substring)', async () => {
+      store.setFilters({ name: 'sun' });
+      const result = await firstValueFrom(store.filteredDeals$);
+      expect(result.map((d) => d.id)).toEqual(['1', '3']);
+    });
+
+    it('filters by minimum and maximum purchase price', async () => {
+      store.setFilters({ minPrice: 3_000_000, maxPrice: 6_000_000 });
+      const result = await firstValueFrom(store.filteredDeals$);
+      expect(result.map((d) => d.id)).toEqual(['2']);
+    });
+
+    it('combines name and price filters', async () => {
+      store.setFilters({ name: 'sun', minPrice: 6_000_000 });
+      const result = await firstValueFrom(store.filteredDeals$);
+      expect(result.map((d) => d.id)).toEqual(['3']);
+    });
+
+    it('merges partial filter updates', async () => {
+      store.setFilters({ name: 'sun' });
+      store.setFilters({ maxPrice: 3_000_000 });
+      const result = await firstValueFrom(store.filteredDeals$);
+      expect(result.map((d) => d.id)).toEqual(['1']);
+      expect(await firstValueFrom(store.filters$)).toEqual({
+        name: 'sun',
+        minPrice: null,
+        maxPrice: 3_000_000,
+      });
+    });
+  });
 });

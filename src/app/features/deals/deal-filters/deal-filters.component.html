@@ -1,0 +1,16 @@
+<form class="filters" [formGroup]="form" role="search" aria-label="Filter deals">
+  <div class="filters__field">
+    <label for="filter-name">Search by name</label>
+    <input id="filter-name" type="search" formControlName="name" placeholder="e.g. Sunset" />
+  </div>
+
+  <div class="filters__field">
+    <label for="filter-min">Min purchase price</label>
+    <input id="filter-min" type="number" min="0" step="1000" formControlName="minPrice" />
+  </div>
+
+  <div class="filters__field">
+    <label for="filter-max">Max purchase price</label>
+    <input id="filter-max" type="number" min="0" step="1000" formControlName="maxPrice" />
+  </div>
+</form>

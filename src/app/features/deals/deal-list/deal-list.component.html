@@ -13,38 +13,42 @@
           <p>{{ vm.error }}</p>
           <button type="button" (click)="retry()">Try again</button>
         </div>
-      } @else if (vm.deals.length === 0) {
-        <p class="deals__status">No deals yet.</p>
       } @else {
-        <div class="deals__table-wrap">
-          <table class="deals__table">
-            <caption class="sr-only">
-              Real estate deals
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Address</th>
-                <th scope="col" class="num">Purchase price</th>
-                <th scope="col" class="num">NOI</th>
-                <th scope="col" class="num">Cap rate</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (deal of vm.deals; track deal.id) {
+        <app-deal-filters />
+
+        @if (vm.deals.length === 0) {
+          <p class="deals__status">No deals match your search.</p>
+        } @else {
+          <div class="deals__table-wrap">
+            <table class="deals__table">
+              <caption class="sr-only">
+                Real estate deals
+              </caption>
+              <thead>
                 <tr>
-                  <td>{{ deal.name }}</td>
-                  <td>{{ deal.address }}</td>
-                  <td class="num">
-                    {{ deal.purchasePrice | currency: 'USD' : 'symbol' : '1.0-0' }}
-                  </td>
-                  <td class="num">{{ deal.noi | currency: 'USD' : 'symbol' : '1.0-0' }}</td>
-                  <td class="num">{{ deal | capRate | percent: '1.1-1' }}</td>
+                  <th scope="col">Name</th>
+                  <th scope="col">Address</th>
+                  <th scope="col" class="num">Purchase price</th>
+                  <th scope="col" class="num">NOI</th>
+                  <th scope="col" class="num">Cap rate</th>
                 </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                @for (deal of vm.deals; track deal.id) {
+                  <tr>
+                    <td [innerHTML]="deal.name | highlight: vm.filters.name"></td>
+                    <td>{{ deal.address }}</td>
+                    <td class="num">
+                      {{ deal.purchasePrice | currency: 'USD' : 'symbol' : '1.0-0' }}
+                    </td>
+                    <td class="num">{{ deal.noi | currency: 'USD' : 'symbol' : '1.0-0' }}</td>
+                    <td class="num">{{ deal | capRate | percent: '1.1-1' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
       }
     }
   </section>
