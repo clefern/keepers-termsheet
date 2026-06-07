@@ -1,0 +1,63 @@
+<app-shell>
+  <section class="deal-form">
+    <h1 class="deal-form__title">New deal</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="name">Deal name</label>
+        <input id="name" type="text" formControlName="name" autocomplete="off" />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <p class="field__error">Deal name is required.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="address">Address</label>
+        <input id="address" type="text" formControlName="address" autocomplete="off" />
+        @if (form.controls.address.touched && form.controls.address.invalid) {
+          <p class="field__error">Address is required.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="purchasePrice">Purchase price (USD)</label>
+        <input
+          id="purchasePrice"
+          type="number"
+          min="1"
+          step="1000"
+          formControlName="purchasePrice"
+        />
+        @if (form.controls.purchasePrice.touched && form.controls.purchasePrice.invalid) {
+          <p class="field__error">Enter a purchase price greater than zero.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="noi">Net operating income (USD)</label>
+        <input id="noi" type="number" min="0" step="1000" formControlName="noi" />
+        @if (form.controls.noi.touched && form.controls.noi.invalid) {
+          <p class="field__error">Enter a net operating income of zero or more.</p>
+        }
+      </div>
+
+      <p class="deal-form__caprate" aria-live="polite">
+        @if (capRatePreview() !== null) {
+          <span
+            >Cap rate: <strong>{{ capRatePreview() | percent: '1.1-1' }}</strong></span
+          >
+          @if (capRateOutOfRange()) {
+            <span class="deal-form__warning"> — outside the typical 5%–12% range</span>
+          }
+        } @else {
+          <span class="deal-form__hint">Cap rate updates as you enter price and NOI.</span>
+        }
+      </p>
+
+      <div class="deal-form__actions">
+        <a routerLink="/deals" class="deal-form__cancel">Cancel</a>
+        <button type="submit" class="deal-form__submit">Create deal</button>
+      </div>
+    </form>
+  </section>
+</app-shell>
