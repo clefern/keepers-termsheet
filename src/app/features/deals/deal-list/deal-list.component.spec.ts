@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { DealListComponent } from './deal-list.component';
 import { DealStore } from '@core/deals/deal-store.service';
@@ -33,6 +33,7 @@ describe('DealListComponent', () => {
     TestBed.configureTestingModule({
       imports: [DealListComponent],
       providers: [
+        provideRouter([]),
         {
           provide: DealStore,
           useValue: { deals$, loading$, error$, load },
@@ -47,7 +48,6 @@ describe('DealListComponent', () => {
             logout: jest.fn(),
           },
         },
-        { provide: Router, useValue: { navigate: jest.fn() } },
       ],
     });
 

@@ -1,5 +1,6 @@
 import { AsyncPipe, CurrencyPipe, PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { DealStore } from '@core/deals/deal-store.service';
 import { AppShellComponent } from '@shared/layout/app-shell/app-shell.component';
@@ -8,7 +9,7 @@ import { CapRatePipe } from '@shared/pipes/cap-rate.pipe';
 @Component({
   selector: 'app-deal-list',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, PercentPipe, CapRatePipe, AppShellComponent],
+  imports: [AsyncPipe, CurrencyPipe, PercentPipe, CapRatePipe, AppShellComponent, RouterLink],
   templateUrl: './deal-list.component.html',
   styleUrl: './deal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
