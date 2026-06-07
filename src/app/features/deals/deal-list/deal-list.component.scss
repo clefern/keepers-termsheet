@@ -1,23 +1,69 @@
 .deals {
-  &__header {
+  &__toolbar {
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  &__status {
+    color: #5a5a5a;
+  }
+
+  &__error {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    padding: 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem;
+    border: 1px solid #f3c2c2;
+    border-radius: 0.5rem;
+    background: #fdeaea;
+    color: #b00020;
+
+    button {
+      padding: 0.4rem 0.85rem;
+      border: 1px solid currentColor;
+      border-radius: 0.5rem;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
   }
 
-  &__user {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #5a5a5a;
+  &__table-wrap {
+    overflow-x: auto;
   }
 
-  &__placeholder {
-    padding: 1.5rem;
-    color: #5a5a5a;
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+
+    th,
+    td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #5a5a5a;
+    }
+
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    tbody tr:hover {
+      background: #f7f5f1;
+    }
   }
 }

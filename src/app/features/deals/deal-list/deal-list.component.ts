@@ -1,24 +1,33 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '@core/auth/auth.service';
+import { AsyncPipe, CurrencyPipe, PercentPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import { DealStore } from '@core/deals/deal-store.service';
+import { AppShellComponent } from '@shared/layout/app-shell/app-shell.component';
+import { CapRatePipe } from '@shared/pipes/cap-rate.pipe';
 
 @Component({
   selector: 'app-deal-list',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, CurrencyPipe, PercentPipe, CapRatePipe, AppShellComponent],
   templateUrl: './deal-list.component.html',
   styleUrl: './deal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DealListComponent {
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+export class DealListComponent implements OnInit {
+  private readonly store = inject(DealStore);
 
-  readonly user$ = this.auth.user$;
+  /** Single view-model so the template subscribes once via the async pipe. */
+  readonly vm$ = combineLatest({
+    deals: this.store.deals$,
+    loading: this.store.loading$,
+    error: this.store.error$,
+  });
 
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
+  ngOnInit(): void {
+    this.store.load();
+  }
+
+  retry(): void {
+    this.store.load();
   }
 }
