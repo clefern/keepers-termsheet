@@ -4,14 +4,15 @@ import { BehaviorSubject } from 'rxjs';
 import { DealListComponent } from './deal-list.component';
 import { DealStore } from '@core/deals/deal-store.service';
 import { AuthService } from '@core/auth/auth.service';
-import { Deal } from '@core/models/deal.model';
+import { Deal, DealFilters } from '@core/models/deal.model';
 import { User } from '@core/models/user.model';
 
 describe('DealListComponent', () => {
   let fixture: ComponentFixture<DealListComponent>;
-  let deals$: BehaviorSubject<Deal[]>;
+  let filteredDeals$: BehaviorSubject<Deal[]>;
   let loading$: BehaviorSubject<boolean>;
   let error$: BehaviorSubject<string | null>;
+  let filters$: BehaviorSubject<DealFilters>;
   let load: jest.Mock;
 
   const sample: Deal[] = [
@@ -25,9 +26,10 @@ describe('DealListComponent', () => {
   ];
 
   function setup(): void {
-    deals$ = new BehaviorSubject<Deal[]>([]);
+    filteredDeals$ = new BehaviorSubject<Deal[]>([]);
     loading$ = new BehaviorSubject<boolean>(false);
     error$ = new BehaviorSubject<string | null>(null);
+    filters$ = new BehaviorSubject<DealFilters>({ name: '', minPrice: null, maxPrice: null });
     load = jest.fn();
 
     TestBed.configureTestingModule({
@@ -36,7 +38,7 @@ describe('DealListComponent', () => {
         provideRouter([]),
         {
           provide: DealStore,
-          useValue: { deals$, loading$, error$, load },
+          useValue: { filteredDeals$, loading$, error$, filters$, load, setFilters: jest.fn() },
         },
         {
           provide: AuthService,
@@ -71,20 +73,29 @@ describe('DealListComponent', () => {
     expect(text()).toContain('Loading deals');
   });
 
-  it('shows an empty state when there are no deals', () => {
-    deals$.next([]);
+  it('shows an empty state when nothing matches', () => {
+    filteredDeals$.next([]);
     fixture.detectChanges();
-    expect(text()).toContain('No deals yet');
+    expect(text()).toContain('No deals match your search');
   });
 
   it('renders a row per deal with a formatted cap rate', () => {
-    deals$.next(sample);
+    filteredDeals$.next(sample);
     fixture.detectChanges();
 
     const rows = (fixture.nativeElement as HTMLElement).querySelectorAll('tbody tr');
     expect(rows).toHaveLength(1);
     expect(text()).toContain('Sunset Apartments');
     expect(text()).toContain('7.5%');
+  });
+
+  it('highlights the active search term in the name', () => {
+    filteredDeals$.next(sample);
+    filters$.next({ name: 'Sun', minPrice: null, maxPrice: null });
+    fixture.detectChanges();
+
+    const mark = (fixture.nativeElement as HTMLElement).querySelector('tbody mark');
+    expect(mark?.textContent).toBe('Sun');
   });
 
   it('shows an error with a retry that reloads', () => {
